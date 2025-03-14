@@ -12,6 +12,15 @@ const EventCard = ({
   small = false,
   ...props
 }) => (
+  <>
+    {/* {console.log("EventCard props:", {
+      imageSrc,
+      imageAlt,
+      date,
+      title,
+      label,
+      small,
+    })} */}
     <div
       data-testid="card-testid"
       className={`EventCard${small ? " EventCard--small" : ""}`}
@@ -26,7 +35,8 @@ const EventCard = ({
         <div className="EventCard__month">{getMonth(date)}</div>
       </div>
     </div>
-  );
+  </>
+);
 
 EventCard.propTypes = {
   imageSrc: PropTypes.string.isRequired,
@@ -40,6 +50,6 @@ EventCard.propTypes = {
 EventCard.defaultProps = {
   imageAlt: "image",
   small: false,
-}
+};
 
 export default EventCard;
