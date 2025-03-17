@@ -11,11 +11,14 @@ const Slider = () => {
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
   );
   const nextCard = () => {
-    setTimeout(() => setIndex(index < byDateDesc.length ? index + 1 : 0), 5000);
+    if (!byDateDesc?.length) return; // Vérifie que byDateDesc existe et n'est pas vide
+    setTimeout(() => setIndex((index + 1) % byDateDesc.length), 5000);
   };
+
   useEffect(() => {
     nextCard();
-  });
+  }, [index, byDateDesc]); // Ajout des dépendances
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
@@ -24,6 +27,7 @@ const Slider = () => {
         // Les fragments (<> </>) ne peuvent pas avoir de key → Il faut utiliser
         // React.Fragment key={event.title}.
         <React.Fragment key={event.title || idx}>
+          {/* <React.Fragment key={`${event.title}-${event.date}`}> */}
           <div
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
@@ -44,7 +48,7 @@ const Slider = () => {
                 <input
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked={index === radioIdx}
                   readOnly
                 />
               ))}

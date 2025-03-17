@@ -4,25 +4,32 @@ import Field, { FIELD_TYPES } from "../../components/Field";
 import Select from "../../components/Select";
 import Button, { BUTTON_TYPES } from "../../components/Button";
 
-const mockContactApi = () => new Promise((resolve) => { setTimeout(resolve, 500); })
+// Fonction simulée pour l'API
+const mockContactApi = () =>
+  new Promise((resolve) => {
+    setTimeout(resolve, 500);
+  });
 
 const Form = ({ onSuccess, onError }) => {
   const [sending, setSending] = useState(false);
+
   const sendContact = useCallback(
     async (evt) => {
       evt.preventDefault();
-      setSending(true);
-      // We try to call mockContactApi
+      setSending(true); // Indiquer que l'envoi est en cours
+
       try {
-        await mockContactApi();
-        setSending(false);
+        await mockContactApi(); // Simulation de l'appel API
+        setSending(false); // Fin de l'envoi
+        onSuccess(); // Appeler la fonction de succès si l'API se termine correctement
       } catch (err) {
-        setSending(false);
-        onError(err);
+        setSending(false); // Fin de l'envoi en cas d'erreur
+        onError(err); // Appeler la fonction d'erreur en cas d'échec
       }
     },
-    [onSuccess, onError]
+    [onSuccess, onError] // Dépendances du callback
   );
+
   return (
     <form onSubmit={sendContact}>
       <div className="row">
@@ -56,11 +63,11 @@ const Form = ({ onSuccess, onError }) => {
 Form.propTypes = {
   onError: PropTypes.func,
   onSuccess: PropTypes.func,
-}
+};
 
 Form.defaultProps = {
   onError: () => null,
   onSuccess: () => null,
-}
+};
 
 export default Form;
