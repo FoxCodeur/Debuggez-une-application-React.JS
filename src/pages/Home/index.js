@@ -14,9 +14,14 @@ import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
   const { data } = useData();
-  const last = data?.events
-    ?.slice() // Copie du tableau pour éviter de muter l'original
-    .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+  // Dans notre cas, reduce() va parcourir data.events et retourner l'événement
+  //  qui a la date la plus récente.
+  const last = data?.events?.reduce(
+    (latest, event) =>
+      !latest || new Date(event.date) > new Date(latest.date) ? event : latest,
+    null
+  );
+
   return (
     <>
       <header>

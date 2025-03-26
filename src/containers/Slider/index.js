@@ -5,7 +5,9 @@ import { getMonth } from "../../helpers/Date";
 import "./style.scss";
 
 const Slider = () => {
+  // Récupération des données depuis le contexte global
   const { data } = useData();
+  // L'état local qui permet de gérer l'index de la carte actuellement affichée
   const [index, setIndex] = useState(0);
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
@@ -17,7 +19,13 @@ const Slider = () => {
 
   useEffect(() => {
     nextCard();
-  }, [index, byDateDesc]); // Ajout des dépendances
+  }, [index, byDateDesc]);
+  // L'idée d'ajouter index et byDateDesc aux dépendances du useEffect est de
+  //  s'assurer que la fonction nextCard sera réexécutée chaque fois que l'une
+  //  de ces valeurs change.
+  // Il est très important de spécifier les dépendances du useEffect pour
+  // contrôler quand l'effet doit être exécuté. Dans ce cas, on souhaite
+  //  que l'effet s'exécute lorsque l'index ou le tableau byDateDesc change.
 
   return (
     <div className="SlideCardList">
@@ -46,6 +54,13 @@ const Slider = () => {
             <div className="SlideCard__pagination">
               {byDateDesc.map((_, radioIdx) => (
                 <input
+                  /* Dans le deuxième map, vous utilisez l'underscore (_) comme nom
+                de variable pour les éléments de la liste parce que, dans ce cas,
+                il n'y a pas besoin d'utiliser l'objet entier (l'élément de
+                byDateDesc), mais seulement sa position dans la liste pour générer
+                les éléments de pagination. Cependant, il est toujours
+                possible d'utiliser n'importe quel nom pour la variable. */
+                  key={_.description}
                   type="radio"
                   name="radio-button"
                   checked={index === radioIdx}
